@@ -6,6 +6,8 @@ import '../widgets/poke_card.dart';
 import '../models/simple_pokemon.dart';
 
 class Home extends StatefulWidget {
+  static const String url = 'https://pokeapi.co/api/v2/pokemon/';
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -13,9 +15,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Pokemons pokemons;
 
-  fetchData() async {
-    String _url = 'https://pokeapi.co/api/v2/pokemon/';
-    final res = await http.get(_url);
+  _fetchData() async {
+    final res = await http.get(Home.url);
     final decode = jsonDecode(res.body);
     final data = Pokemons.fromJson(decode['results']);
     setState(() => pokemons = data);
@@ -24,7 +25,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    _fetchData();
   }
 
   @override
@@ -33,15 +34,21 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         elevation: 0.0,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Image(image: AssetImage('assets/pikachu.png')),
             SizedBox(width: 10.0),
-            Text('Pokédex'),
+            Text(
+              'Pokédex',
+              style: Theme.of(context)
+                  .textTheme
+                  .display1
+                  .copyWith(color: Colors.white),
+            ),
           ],
         ),
       ),
-      // backgroundColor: Colors.red,
+      backgroundColor: Colors.red,
       body: pokemons == null
           ? Center(child: CircularProgressIndicator())
           : GridView.count(

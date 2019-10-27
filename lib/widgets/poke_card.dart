@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -17,7 +18,7 @@ class PokeCard extends StatefulWidget {
 class _PokeCardState extends State<PokeCard> {
   Pokemon pokemon;
 
-  fetchPokemon() async {
+  _fetchPokemon() async {
     final res = await http.get(widget.pokeURL);
     final decode = jsonDecode(res.body);
     final data = Pokemon.fromJson(decode);
@@ -27,7 +28,14 @@ class _PokeCardState extends State<PokeCard> {
   @override
   void initState() {
     super.initState();
-    fetchPokemon();
+    _fetchPokemon();
+  }
+
+  @override
+  void setState(fn) {
+    if (this.mounted) {
+      super.setState(fn);
+    }
   }
 
   @override
@@ -39,18 +47,24 @@ class _PokeCardState extends State<PokeCard> {
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  height: 100,
-                  width: 100,
-                  child: FadeInImage(
-                    placeholder: AssetImage('assets/pokeball.png'),
-                    image: NetworkImage(pokemon.sprites.frontDefault),
+                Expanded(
+                  flex: 3,
+                  child: CachedNetworkImage(
+                    imageUrl: pokemon.sprites.frontDefault,
+                    placeholder: (context, url) => Image(
+                      image: AssetImage('assets/pokeball.png'),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
-                Text(
-                  toBeginningOfSentenceCase(pokemon.name),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.title,
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    toBeginningOfSentenceCase(pokemon.name),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.title,
+                  ),
                 ),
               ],
             ),
