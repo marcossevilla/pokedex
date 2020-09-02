@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
 import 'package:http/http.dart' as http;
 
 import '../widgets/poke_card.dart';
@@ -36,13 +38,20 @@ class _HomeState extends State<Home> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Image(image: AssetImage('assets/pikachu.png')),
+            Flexible(
+              child: Image.asset(
+                'assets/pikachu.png',
+                fit: BoxFit.contain,
+                height: 60.0,
+                width: 60.0,
+              ),
+            ),
             SizedBox(width: 10.0),
             Text(
               'Pokédex',
               style: Theme.of(context)
                   .textTheme
-                  .display1
+                  .headline4
                   .copyWith(color: Colors.white),
             ),
           ],

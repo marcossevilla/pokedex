@@ -1,8 +1,10 @@
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/pokemon.dart';
 
@@ -63,7 +65,7 @@ class _PokeCardState extends State<PokeCard> {
                     toBeginningOfSentenceCase(pokemon.name),
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
               ],
